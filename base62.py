@@ -77,3 +77,27 @@ def decode(input):
     for i in reversed(range(len(input))):
         output += b62_table_decode[input[i]] * (62 ** i)
     return output
+
+class seeded():
+    def __init__(self,seed):
+        self.seed = seed
+        self.gen_tables()
+
+    def gen_tables(self):
+        self.b62_encode = {}
+        for x in range(len(self.seed)):
+            self.b62_encode[x] = self.seed[x]
+        self.b62_decode = dict([(value, key) for key, value in self.b62_encode.items()])
+
+    def encode(self, input):
+        output = ""
+        while input != 0:
+            output += self.b62_encode[input % 62]
+            input = input // 62
+        return output
+
+    def decode(self, input):
+        output = 0
+        for i in reversed(range(len(input))):
+            output += self.b62_decode[input[i]] * (62 ** i)
+        return output

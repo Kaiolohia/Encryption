@@ -2,23 +2,11 @@ import random
 import string
 import base62
 
-"""
-(IDEA): Get value of seed and random letters and then manipulate the message int from there intead of only from random letters and leaving the seed useless
-"""
-"""
-(IDEA): Two versions of encrypt and decrypt, one is seeded and the other is not, seeded one leaves no data
-"""
-"""
-(IDEA): two seeds but the second one is a large seed that has all 3 private seeds in it
-"""
-
 class EncryptDecrypt():
-    '''
-    EncryptDecrypt takes in 3 optional seeds, seed_1 is your "main" seed
-    seed_2 is your alphabetical seed, this takes in a list of UPPER AND LOWERCASE letters from the english alphabet
-    in any order ["x", "s", "t"...]
-    seed_3 is your numerical seed, this takes a list of numbers 0-9 in any order [5,1,2...]
-    '''
+    """
+    EncryptDecrypt has two seeds which can be generated each by using seed_gen_pub() for the public key and seed_gen_priv() for the private key
+    The public key is just a string of numbers ran trough base62
+    """
 
     def __init__(self, 
     public_seed:str = "123456789", 
@@ -28,6 +16,7 @@ class EncryptDecrypt():
         destructured_seed = self.destructure_priv_seed()
         self.seed_2 = list(destructured_seed[1])
         self.seed_3 = list(destructured_seed[0])
+        self.s_b62 = base62.seeded(destructured_seed[2])
 
     def destructure_priv_seed(self):
         destructure = []
@@ -61,7 +50,7 @@ class EncryptDecrypt():
             char2 = random.choice(choices)
             msg[i] = str(int(msg[i]) + ord(char1) + ord(char2)).zfill(3)
         msg[0] = str(int(msg[0]) + 200)
-        return base62.encode(int(''.join(numbers_encrypt("".join(msg)))))
+        return self.s_b62.encode(int(''.join(numbers_encrypt("".join(msg)))))
 
     def decrypt(self, msg):
         """
@@ -80,7 +69,7 @@ class EncryptDecrypt():
         return "".join(des_msg)
 
     def decrypt_seeded(self, msg):
-        msg = ascii_chunk(numbers_decrypt(list(str(base62.decode(msg)))))
+        msg = ascii_chunk(numbers_decrypt(list(str(self.s_b62.decode(msg)))))
         msg[0] = str(int(msg[0]) - 200).zfill(3)
         #decrypting
         random.seed(self.public_seed)
@@ -176,3 +165,7 @@ def seed_gen_priv():
     random.shuffle(letters)
     seed += "".join(nums) + "".join(letters)
     return "".join(to_number(seed))
+
+ed = EncryptDecrypt(private_seed = "049055053054050052048056051057068115082088086067074077069101117116120076111114065113080105081097110100073109107083118079087104098072099078122070112085071066108089075106121090084103119102056057053052055050048054049051105080081106066084097100112089077098109122087101120065075104085099102118076108074071088082121070069079067103117114111068119078086113083090115073116107072110")
+
+print(ed.decrypt_seeded(ed.encrypt_seeded("Sample")))
