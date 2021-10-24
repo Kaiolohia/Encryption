@@ -20,8 +20,6 @@
 
 import random
 import base64
-import Includes
-import time
 
 #These are the encryption maps used to swap around letters and also to put the shift iteration keys before each letter
 
@@ -220,21 +218,3 @@ def from_number(msg):
     else:
       chunk += msg[i-1]
   return nums
-
-if __name__ == '__main__':
-    #Includes.LoadingScreen()
-    ValidInput = False
-    while not ValidInput:
-      Includes.Clear()
-      cur_input = input('Encrypt or Decrypt: ').lower()
-      if cur_input == 'encrypt':
-          print(EncryptDecrypt.encrypt(EncryptDecrypt,input('Encrypt: ')))
-          ValidInput = True
-          break
-      elif cur_input== 'decrypt':
-          print(EncryptDecrypt.decrypt(EncryptDecrypt,input('Decrpyt: ')))
-          ValidInput = True
-          break
-      else:
-          print('Invalid Input | Please type either Encrypt or Decrypt')
-          time.sleep(1)
