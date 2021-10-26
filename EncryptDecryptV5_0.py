@@ -25,8 +25,7 @@ class EncryptDecrypt():
         """
         The private seed comes in as one big key with three sub keys
         """
-        destructure = [self.private_seed[0:10], self.private_seed[10:61], self.private_seed[61:]]
-        return destructure
+        return [self.private_seed[0:10], self.private_seed[10:61], self.private_seed[61:]]
         
 
     def encrypt(self, msg): #unseeded encryption, leaves tools to decrypt in the message
