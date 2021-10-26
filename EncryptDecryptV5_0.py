@@ -159,16 +159,16 @@ def from_number(msg):
     """
     Converts an INT of ascii chars from int form to char form.
     """
-  nums = []
-  chunk = ''
-  for i in range(1, len(msg) + 1):
-    if i%3 == 0:
-      chunk += msg[i-1]
-      nums.append(str(chr(int(chunk))))
-      chunk = ''
-    else:
-      chunk += msg[i-1]
-  return nums
+    nums = []
+    chunk = ''
+    for i in range(1, len(msg) + 1):
+        if i%3 == 0:
+            chunk += msg[i-1]
+            nums.append(str(chr(int(chunk))))
+            chunk = ''
+        else:
+            chunk += msg[i-1]
+    return nums
 
 def ascii_chunk(input:str):
     """
