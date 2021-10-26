@@ -25,10 +25,7 @@ class EncryptDecrypt():
         """
         The private seed comes in as one big key with three sub keys
         """
-        destructure = []
-        destructure.append(self.private_seed[0:10])
-        destructure.append(self.private_seed[10:61])
-        destructure.append(self.private_seed[61:])
+        destructure = [self.private_seed[0:10], self.private_seed[10:61], self.private_seed[61:]]
         return destructure
         
 
