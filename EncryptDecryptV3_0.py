@@ -33,7 +33,6 @@
 
 import random
 import base64
-import Includes
 import time
 
 #These are the encryption maps used to swap around letters and also to put the shift iteration keys before each letter
@@ -183,10 +182,8 @@ class EncryptDecrypt:
 
 
 if __name__ == '__main__':
-    #Includes.LoadingScreen()
     ValidInput = False
     while not ValidInput:
-      Includes.Clear()
       cur_input = input('Encrypt or Decrypt: ').lower()
       if cur_input == 'encrypt':
           print(EncryptDecrypt.encrypt(EncryptDecrypt,input('Encrypt: ')))

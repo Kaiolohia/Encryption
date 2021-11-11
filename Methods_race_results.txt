@@ -1,0 +1,18 @@
+100000k Iterations
+
+decrypt_v5: 4.764610052108765s | payload: "lPxyBPxFqS9QQKqZJeIORXELXVqyqD"
+decrypt_v4_A: 16.929024696350098s | payload: "OTk4NzU1NDMxMDA5Nzc1NTMzMjE5OTg3NTUzMzEwOTg3NjY1NDIxMDk5ODc1NTMyMTEwOTg2NTUzMjIxMDg3NjU1NDMxMTk5Nzc2NDQzMTA5ODg3NTUzMjExMDk4NjY0MzMyMDA4Nzc1NDQzMTE5ODc3NjUzMzExOTk4NjY0NDMxMDA5Nzc2NTMzMjAwODg2NTU0MjExOTk="
+decrypt_v4_B: 11.288008213043213s | payload: "MDk2NjA3NDMwMDc4NzExNTM4MTk2ODIyNjU4MzIwOTM5NzY5NDM0MDQwODg3NTMzMTU0OTcyNjQ0"
+decrypt_v4_C: 8.007930994033813s | payload: "dzN4TjN3eDBzbjN1bzB6ZTBleQ=="
+decrypt_v3: 7.191041946411133s | payload: "dzV1Ujh1ejh4aDRzcTR3aTd6eA=="
+decrypt_v2: 7.979659557342529s | payload: "eDVkQjRkajF4czRoejZ0dzd1aA=="
+decrypt_v1: 3.492812395095825s | payload: "ZnhEdGlhdnhhdHR0bQ=="
+encrypt_v5: 85.10284090042114s | payload: "This is a longer message to test the speed of methods when handling longer messages"
+encrypt_v4_A: 131.59406566619873s | payload: "This is a longer message to test the speed of methods when handling longer messages"
+encrypt_v4_B: 95.98058938980103s | payload: "This is a longer message to test the speed of methods when handling longer messages"
+encrypt_v4_C: 55.035250663757324s | payload: "This is a longer message to test the speed of methods when handling longer messages"
+encrypt_v3: 43.15308594703674s | payload: "This is a longer message to test the speed of methods when handling longer messages"
+encrypt_v2: 32.029760122299194s | payload: "This is a longer message to test the speed of methods when handling longer messages"
+encrypt_v1: 16.810458183288574s | payload: "This is a longer message to test the speed of methods when handling longer messages"
+
+For the decryption tests, all of the methods are fed the output of the string "Sample"
