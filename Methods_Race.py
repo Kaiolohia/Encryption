@@ -6,12 +6,14 @@ import EncryptDecryptV3_0
 import EncryptDecryptV2_0
 import EncryptDecryptV1_0
 import time
-iterations = 100000
+iterations = 10000
 edV_5 = EncryptDecryptV5_0.EncryptDecrypt()
 edV4_A = EncryptDecryptV4_A.EncryptDecrypt()
 edV4_B = EncryptDecryptV4_B.EncryptDecrypt()
 edV4_C = EncryptDecryptV4_C.EncryptDecrypt()
 edV3 = EncryptDecryptV3_0.EncryptDecrypt()
+
+encryptionMessage = "Sample"
 
 
 #all of the decrypt tasks are each versions output of "Sample"
@@ -64,37 +66,37 @@ def decrypt_v1():
 @timer
 def encrypt_v5():
     for i in range(iterations):
-        edV_5.encrypt("This is a longer message to test the speed of methods when handling longer messages")
+        edV_5.encrypt(encryptionMessage)
 
 @timer
 def encrypt_v4_A():
     for i in range(iterations):
-        edV4_A.encrypt("This is a longer message to test the speed of methods when handling longer messages")
+        edV4_A.encrypt(encryptionMessage)
 
 @timer
 def encrypt_v4_B():
     for i in range(iterations):
-        edV4_B.encrypt("This is a longer message to test the speed of methods when handling longer messages")
+        edV4_B.encrypt(encryptionMessage)
 
 @timer
 def encrypt_v4_C():
     for i in range(iterations):
-        edV4_C.encrypt("This is a longer message to test the speed of methods when handling longer messages")
+        edV4_C.encrypt(encryptionMessage)
 
 @timer
 def encrypt_v3():
     for i in range(iterations):
-        edV3.encrypt("This is a longer message to test the speed of methods when handling longer messages")
+        edV3.encrypt(encryptionMessage)
 
 @timer
 def encrypt_v2():
     for i in range(iterations):
-        EncryptDecryptV2_0.encrypt("This is a longer message to test the speed of methods when handling longer messages")
+        EncryptDecryptV2_0.encrypt(encryptionMessage)
 
 @timer 
 def encrypt_v1():
     for i in range(iterations):
-        EncryptDecryptV1_0.encrypt("This is a longer message to test the speed of methods when handling longer messages")
+        EncryptDecryptV1_0.encrypt(encryptionMessage)
 
 decrypt_v5()
 decrypt_v4_A()
