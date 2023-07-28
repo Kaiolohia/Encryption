@@ -6,7 +6,7 @@ import EncryptDecryptV3_0
 import EncryptDecryptV2_0
 import EncryptDecryptV1_0
 import time
-iterations = 10000
+iterations = 100000
 edV_5 = EncryptDecryptV5_0.EncryptDecrypt()
 edV4_A = EncryptDecryptV4_A.EncryptDecrypt()
 edV4_B = EncryptDecryptV4_B.EncryptDecrypt()

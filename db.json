@@ -1,40 +1,48 @@
 {
-    "users" : {
-        "0" : {
+    "users": {
+        "0": {
             "name": "Dean",
-            "password" : "password",
-            "groups" : {
-                "0" : {
-                    "users" : ["1"]
+            "password": "password",
+            "groups": {
+                "0": {
+                    "users": [
+                        "1"
+                    ]
                 }
             }
         },
-
-        "1" : {
+        "1": {
             "name": "Amaya",
-            "password" : "password",
-            "groups" : {
-                "0" : {
-                    "users" : ["0"]
+            "password": "password",
+            "groups": {
+                "0": {
+                    "users": [
+                        "0"
+                    ]
                 }
             }
         }
     },
-    "messages" : {
-        "data" : {
-            "t_messages" : 1
-        },
-
-        "0" : "sample message"
-    }, 
-    "groups" : {
+    "messages": {
         "data": {
-            "t_groups" : 1
+            "t_messages": 2
         },
-        "0" : {
-            "users" : ["0", "1"],
-            "message_ids" : ["0"]
+        "0": "sample message",
+        "1": "secret message"
+    },
+    "groups": {
+        "data": {
+            "t_groups": 1
+        },
+        "0": {
+            "users": [
+                "0",
+                "1"
+            ],
+            "message_ids": [
+                "0",
+                "1"
+            ]
         }
     }
-
 }
