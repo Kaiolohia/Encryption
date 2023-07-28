@@ -1,0 +1,40 @@
+{
+    "users" : {
+        "0" : {
+            "name": "Dean",
+            "password" : "password",
+            "groups" : {
+                "0" : {
+                    "users" : ["1"]
+                }
+            }
+        },
+
+        "1" : {
+            "name": "Amaya",
+            "password" : "password",
+            "groups" : {
+                "0" : {
+                    "users" : ["0"]
+                }
+            }
+        }
+    },
+    "messages" : {
+        "data" : {
+            "t_messages" : 1
+        },
+
+        "0" : "sample message"
+    }, 
+    "groups" : {
+        "data": {
+            "t_groups" : 1
+        },
+        "0" : {
+            "users" : ["0", "1"],
+            "message_ids" : ["0"]
+        }
+    }
+
+}
