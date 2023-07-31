@@ -1,34 +1,31 @@
 {
     "users": {
+        "data": {
+            "t_users": 2
+        },
         "0": {
             "name": "Dean",
             "password": "password",
-            "groups": {
-                "0": {
-                    "users": [
-                        "1"
-                    ]
-                }
-            }
+            "groups": ["0"]
         },
         "1": {
             "name": "Amaya",
             "password": "password",
-            "groups": {
-                "0": {
-                    "users": [
-                        "0"
-                    ]
-                }
-            }
+            "groups": ["0"]
+        },
+        "2": {
+            "name": "Roberts",
+            "password": "xGAS0dKlx32f79",
+            "groups": []
         }
     },
     "messages": {
         "data": {
-            "t_messages": 2
+            "t_messages": 3
         },
         "0": "sample message",
-        "1": "secret message"
+        "1": "secret message",
+        "2": "hello!"
     },
     "groups": {
         "data": {
@@ -36,12 +33,13 @@
         },
         "0": {
             "users": [
-                "0",
-                "1"
+                0,
+                1
             ],
             "message_ids": [
-                "0",
-                "1"
+                0,
+                1,
+                2
             ]
         }
     }

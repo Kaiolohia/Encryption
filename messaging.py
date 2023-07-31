@@ -1,5 +1,6 @@
 import json
 import EncryptDecryptV5_0
+import EvolvingSeeds
 
 # Notes:
 # Automate each users seed based on their UID
@@ -73,9 +74,29 @@ class py_json:
         with open(self.file_location, "w") as f:
             f.write(newData)
     
+    def addUser(self, un, password):
+        uid = self.db["users"]["data"]["t_users"]
+        es_uid = EvolvingSeeds.ev(uid)
+        ued = EncryptDecryptV5_0.EncryptDecrypt(es_uid, EncryptDecryptV5_0.seed_gen_priv(str(es_uid) + str(un)))
+        n_pass = ued.encrypt_seeded(password)
+        self.db["users"][str(uid)] = {
+            "name": un,
+            "password": n_pass,
+            "groups": {}
+        }
+        newData = json.dumps(self.db)
+        with open(self.file_location, "w") as f:
+            f.write(newData)
+        return [n_pass, uid, es_uid]
+        
+
+    def createGroup():
+        
+        return
 
 
-class group:
+
+class Group:
     def __init__(self, groupID, users = None):
         if str(groupID) in pj.groups:
             self.groupID = groupID 
@@ -88,13 +109,61 @@ class group:
             self.messages = []
             self.users = [users]
 
-    def sendMessage(self, m):
+    def sendMessage(self, m, g):
         self.message_ids.append(pj.addMessage(m))
         pj.updateGroup(g)
-        self.messages.inset(0,)
+        self.messages.insert(0,m)
         return
         
-
 pj = py_json("db.json")
-g = group(0)
 
+class User:    
+    def __init__(self):
+        self.loggedIn = False
+        self.groups = []
+
+    def login(self, username, password):
+        self.username = username
+        #validate password
+        # pj.db["users"][str(uid)]
+        found = False
+        for i in range(len(pj.db["users"]) - 1):
+            if username == pj.db["users"][str(i)]["name"]:
+                self.uid = i
+                found = True
+                break
+        if not found:
+            raise Exception("User not found")
+            return
+        self.es_uid = EvolvingSeeds.ev(self.uid)
+        ued = EncryptDecryptV5_0.EncryptDecrypt(self.es_uid, EncryptDecryptV5_0.seed_gen_priv(str(self.es_uid) + str(self.username)))
+        if not password == ued.decrypt_seeded(pj.users[str(self.uid)]["password"]):
+            raise Exception("Passwords do not match!")
+
+        self.loggedIn = True
+
+    def register(self, username, password):
+        self.username = username
+        self.password, self.uid, self.es_uid = pj.addUser(username, password)
+        self.loggedIn = True
+
+    def getDataFromDB(self):
+        if self.loggedIn:
+            self.userEntry = pj.users[str(self.uid)]
+            # self.groups = self.userEntry["groups"]
+            for i in range(len(self.userEntry["groups"])):
+                self.groups.append(Group(self.userEntry["groups"][i]))
+
+    def createGroups(self, user_ids):
+        if self.loggedIn:
+            return
+        
+    def sendMessage(self, message, group_id):
+        self.groups[group_id]
+u = User()
+
+
+try:
+    u.login("Roberts", "password")
+except Exception as e:
+    print(e)

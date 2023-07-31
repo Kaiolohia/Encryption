@@ -183,11 +183,11 @@ def seed_gen_pub():
     seed = random.randint(1,10**6021)
     return base62.encode(seed)
 
-def seed_gen_priv():
+def seed_gen_priv(seed):
     """
     Generates a public seed that fits the format of the private key
     """
-    random.seed()
+    random.seed(seed)
     nums = ["0","1","2","3","4","5","6","7","8","9"]
     letters = list(string.ascii_letters)
     seed = ""
