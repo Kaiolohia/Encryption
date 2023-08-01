@@ -5,27 +5,23 @@
         },
         "0": {
             "name": "Dean",
-            "password": "password",
-            "groups": ["0"]
+            "password": "9Oj6kGKTnbmoS5",
+            "groups": [
+                "0"
+            ]
         },
         "1": {
             "name": "Amaya",
-            "password": "password",
-            "groups": ["0"]
-        },
-        "2": {
-            "name": "Roberts",
-            "password": "xGAS0dKlx32f79",
+            "password": "J7sFtenyDxR5O6",
             "groups": []
         }
     },
     "messages": {
         "data": {
-            "t_messages": 3
+            "t_messages": 2
         },
-        "0": "sample message",
-        "1": "secret message",
-        "2": "hello!"
+        "0": "please work",
+        "1": "please work again"
     },
     "groups": {
         "data": {
@@ -33,13 +29,12 @@
         },
         "0": {
             "users": [
-                0,
-                1
+                "0",
+                "1"
             ],
             "message_ids": [
                 0,
-                1,
-                2
+                1
             ]
         }
     }

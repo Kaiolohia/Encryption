@@ -35,10 +35,15 @@ import EvolvingSeeds
 
 class py_json:
     def __init__(self, location):
+        """
+        Args: location -> String, path to json db
+        
+        """
         self.file_location = location
         self.open()
 
     def open(self):
+        """Load the json db"""
         with open(self.file_location) as f:
             loaded = json.load(f)
         self.db = loaded
@@ -47,15 +52,25 @@ class py_json:
         self.groups = loaded["groups"]
     
     def newGroup(self):
+        """Get newest group ID"""
         return self.groups["data"]["t_groups"]
 
     def getMessages(self, ids):
+        """Get messages by ID
+        Args: ids -> list | list of message IDS
+        """
         messages = []
         for x in range(len(ids)):
             messages.insert(0, self.messages[str(ids[x])])
         return messages
     
     def addMessage(self, m):
+        """Add a message to the DB
+        
+        Args: m -> String | Message content
+
+        Returns message ID
+        """
         self.db["messages"][self.db["messages"]["data"]["t_messages"]] = m
         self.db["messages"]["data"]["t_messages"] = self.db["messages"]["data"]["t_messages"] + 1
         newData = json.dumps(self.db)
@@ -82,17 +97,30 @@ class py_json:
         self.db["users"][str(uid)] = {
             "name": un,
             "password": n_pass,
-            "groups": {}
+            "groups": []
         }
+        self.db["users"]["data"]["t_users"] = self.db["users"]["data"]["t_users"] + 1
         newData = json.dumps(self.db)
         with open(self.file_location, "w") as f:
             f.write(newData)
+        
         return [n_pass, uid, es_uid]
         
+    def updateUserGroups(self, user, groups:int):
+        self.db["users"][str(user.uid)]["groups"].append(str(groups))
+        newData = json.dumps(self.db)
+        with open(self.file_location, "w") as f:
+            f.write(newData)
+        return groups
 
-    def createGroup():
-        
-        return
+    def createGroup(self, users):
+        gid = self.groups["data"]["t_groups"]
+        self.db["groups"][str(gid)] = {
+            "users" : users,
+            "message_ids" : []
+        }
+        self.db["groups"]["data"]["t_groups"] = self.db["groups"]["data"]["t_groups"] + 1
+        return gid
 
 
 
@@ -109,9 +137,9 @@ class Group:
             self.messages = []
             self.users = [users]
 
-    def sendMessage(self, m, g):
+    def sendMessage(self, m):
         self.message_ids.append(pj.addMessage(m))
-        pj.updateGroup(g)
+        pj.updateGroup(self)
         self.messages.insert(0,m)
         return
         
@@ -120,27 +148,25 @@ pj = py_json("db.json")
 class User:    
     def __init__(self):
         self.loggedIn = False
-        self.groups = []
+        self.groups = {}
+        self.cur_gid = None
 
     def login(self, username, password):
         self.username = username
         #validate password
-        # pj.db["users"][str(uid)]
         found = False
         for i in range(len(pj.db["users"]) - 1):
             if username == pj.db["users"][str(i)]["name"]:
-                self.uid = i
                 found = True
-                break
-        if not found:
+                self.uid = i
+        if found == False:
             raise Exception("User not found")
-            return
         self.es_uid = EvolvingSeeds.ev(self.uid)
         ued = EncryptDecryptV5_0.EncryptDecrypt(self.es_uid, EncryptDecryptV5_0.seed_gen_priv(str(self.es_uid) + str(self.username)))
         if not password == ued.decrypt_seeded(pj.users[str(self.uid)]["password"]):
             raise Exception("Passwords do not match!")
-
         self.loggedIn = True
+        self.getDataFromDB()
 
     def register(self, username, password):
         self.username = username
@@ -152,18 +178,38 @@ class User:
             self.userEntry = pj.users[str(self.uid)]
             # self.groups = self.userEntry["groups"]
             for i in range(len(self.userEntry["groups"])):
-                self.groups.append(Group(self.userEntry["groups"][i]))
+                cur_gid = self.userEntry["groups"][i]
+                self.groups[cur_gid] = Group(cur_gid)
 
-    def createGroups(self, user_ids):
+    def createGroup(self, user_ids:int):
+        """Create a new group
+        """
         if self.loggedIn:
-            return
+            cur_gid = pj.updateUserGroups(self, pj.createGroup([str(self.uid), str(user_ids)]))
+            self.groups[cur_gid] = Group(cur_gid)
+            self.cur_gid = cur_gid
         
-    def sendMessage(self, message, group_id):
-        self.groups[group_id]
+    def sendMessage(self, message):
+        self.groups[str(self.cur_gid)].sendMessage(message)
+
+    def selectGroup(self, gid):
+        if str(gid) in self.groups:
+            self.cur_gid = gid
+        else:
+            raise Exception("Group not found or not apart of the group.")
 u = User()
+
+# u.register("Amaya", "password")
 
 
 try:
-    u.login("Roberts", "password")
+    u.login("Dean", "password")
 except Exception as e:
     print(e)
+
+# u.selectGroup(0)
+
+# u.sendMessage("please work again")
+
+u.createGroup(1)
+
