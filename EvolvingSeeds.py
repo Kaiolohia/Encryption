@@ -8,4 +8,4 @@ such as idx = 1 -> 156781
 def ev(x):
     # double encrypt seed (x) and multiplies it by base_num to get a "hash" version of x that is repeatable
     base_num = 1248133254781654
-    return "".join(numbers_encrypt(numbers_encrypt(str(x * base_num), [1,7,2,8,3,9,4,6,5,0]), [1,7,2,8,3,9,4,6,5,0]))
+    return "".join(numbers_encrypt(numbers_encrypt(str(int(x) * base_num), [1,7,2,8,3,9,4,6,5,0]), [1,7,2,8,3,9,4,6,5,0]))

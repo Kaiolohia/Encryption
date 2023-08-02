@@ -176,12 +176,14 @@ def ascii_chunk(input:str):
         chunks.append("".join(input[i:i+3]))
     return chunks
 
-def seed_gen_pub():
+def seed_gen_pub(seed = None):
     """
     Generates a seed that fits the public key format
+    Repeatable outcome based on seed
     """
-    seed = random.randint(1,10**6021)
-    return base62.encode(seed)
+    random.seed(seed)
+    res = random.randint(1,10**6021)
+    return base62.encode(res)
 
 def seed_gen_priv(seed):
     """

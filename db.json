@@ -1,7 +1,7 @@
 {
     "users": {
         "data": {
-            "t_users": 2
+            "t_users": 1
         },
         "0": {
             "name": "Dean",
@@ -9,11 +9,6 @@
             "groups": [
                 "0"
             ]
-        },
-        "1": {
-            "name": "Amaya",
-            "password": "J7sFtenyDxR5O6",
-            "groups": []
         }
     },
     "messages": {

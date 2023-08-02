@@ -1,7 +1,6 @@
 import json
-import EncryptDecryptV5_0
-import EvolvingSeeds
-
+from EncryptDecryptV5_0 import EncryptDecrypt, seed_gen_pub, seed_gen_priv
+from EvolvingSeeds import ev
 # Notes:
 # Automate each users seed based on their UID
 # Automate each message seed based on MID
@@ -33,6 +32,14 @@ import EvolvingSeeds
     "0" : "sample message"
 """
 
+def gen_user_seeds(username:str, uid:int):
+    """
+    returns a list with the public seed at index 0 and the private seed at index 1
+    and the es_uid at index 2
+    Es_UID = Evoling seed, User ID
+    """
+    es_uid = ev(uid)
+    return [seed_gen_pub(es_uid), seed_gen_priv(str(es_uid) + username)]
 class py_json:
     def __init__(self, location):
         """
@@ -71,7 +78,8 @@ class py_json:
 
         Returns message ID
         """
-        self.db["messages"][self.db["messages"]["data"]["t_messages"]] = m
+        # self.db["messages"][self.db["messages"]["data"]["t_messages"]] = m
+        self.messages[self.messages["data"]["t_messages"]] = m
         self.db["messages"]["data"]["t_messages"] = self.db["messages"]["data"]["t_messages"] + 1
         newData = json.dumps(self.db)
         with open(self.file_location, "w") as f:
@@ -91,9 +99,9 @@ class py_json:
     
     def addUser(self, un, password):
         uid = self.db["users"]["data"]["t_users"]
-        es_uid = EvolvingSeeds.ev(uid)
-        ued = EncryptDecryptV5_0.EncryptDecrypt(es_uid, EncryptDecryptV5_0.seed_gen_priv(str(es_uid) + str(un)))
-        n_pass = ued.encrypt_seeded(password)
+        seeds = gen_user_seeds(un, uid)
+        au_ued = EncryptDecrypt(seeds[0], seeds[1])
+        n_pass = au_ued.encrypt_seeded(password)
         self.db["users"][str(uid)] = {
             "name": un,
             "password": n_pass,
@@ -104,7 +112,7 @@ class py_json:
         with open(self.file_location, "w") as f:
             f.write(newData)
         
-        return [n_pass, uid, es_uid]
+        return [n_pass, uid, seeds[2]]
         
     def updateUserGroups(self, user, groups:int):
         self.db["users"][str(user.uid)]["groups"].append(str(groups))
@@ -158,12 +166,14 @@ class User:
         for i in range(len(pj.db["users"]) - 1):
             if username == pj.db["users"][str(i)]["name"]:
                 found = True
-                self.uid = i
+                self.uid = str(i)
+                break
         if found == False:
             raise Exception("User not found")
-        self.es_uid = EvolvingSeeds.ev(self.uid)
-        ued = EncryptDecryptV5_0.EncryptDecrypt(self.es_uid, EncryptDecryptV5_0.seed_gen_priv(str(self.es_uid) + str(self.username)))
-        if not password == ued.decrypt_seeded(pj.users[str(self.uid)]["password"]):
+        seeds = gen_user_seeds(self.username, self.uid)
+        self.es_uid = seeds[2]
+        login_ued = EncryptDecrypt(seeds[0], seeds[1])
+        if not password == login_ued.decrypt_seeded(pj.users[self.uid]["password"]):
             raise Exception("Passwords do not match!")
         self.loggedIn = True
         self.getDataFromDB()
@@ -197,19 +207,25 @@ class User:
             self.cur_gid = gid
         else:
             raise Exception("Group not found or not apart of the group.")
-u = User()
+# u = User()
 
-# u.register("Amaya", "password")
-
-
-try:
-    u.login("Dean", "password")
-except Exception as e:
-    print(e)
+# try:
+#     u.login("Dean", "password")
+# except Exception as e:
+#     print(e)
 
 # u.selectGroup(0)
+u2 = User()
 
-# u.sendMessage("please work again")
+u2.register("Amaya", "password")
 
-u.createGroup(1)
+# try:
+#     u2.login("Amaya", "password")
+# except Exception as e:
+#     print(e)
+
+# u2.selectGroup(0)
+
+# u2.sendMessage("Sending a message from this user!")
+# u.sendMessage("got the message above!")
 
