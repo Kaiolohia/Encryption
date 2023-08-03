@@ -1,13 +1,28 @@
 {
     "users": {
         "data": {
-            "t_users": 1
+            "t_users": 3
         },
         "0": {
             "name": "Dean",
-            "password": "9Oj6kGKTnbmoS5",
+            "password": "THfWSr72WBGwM4",
             "groups": [
                 "0"
+            ]
+        },
+        "1": {
+            "name": "Amaya",
+            "password": "JpQQ47AeVAb6d6",
+            "groups": [
+                "0",
+                "1"
+            ]
+        },
+        "2": {
+            "name": "Benzan",
+            "password": "Nn0HrAKA6FPon4",
+            "groups": [
+                "1"
             ]
         }
     },
@@ -15,20 +30,34 @@
         "data": {
             "t_messages": 2
         },
-        "0": "please work",
-        "1": "please work again"
+        "0": {
+            "author": "0",
+            "message": "Test"
+        },
+        "1": {
+            "author": "2",
+            "message": "Hey sexy"
+        }
     },
     "groups": {
         "data": {
-            "t_groups": 1
+            "t_groups": 2
         },
         "0": {
             "users": [
-                "0",
+                "1",
+                "0"
+            ],
+            "message_ids": [
+                0
+            ]
+        },
+        "1": {
+            "users": [
+                "2",
                 "1"
             ],
             "message_ids": [
-                0,
                 1
             ]
         }
