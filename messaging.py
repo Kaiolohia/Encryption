@@ -114,6 +114,15 @@ class py_json:
         }
         self.db["groups"]["data"]["t_groups"] = self.db["groups"]["data"]["t_groups"] + 1
         return gid
+    
+    def getUsernameByID(self, id):
+        return self.users[str(id)]["name"]
+    
+    def getIDbyUsername(self, username):
+        for i in range(len(self.users)-1):
+            if self.users[str(i)]["name"] == username:
+                return i
+        return "User not found"
 
 class Group:
     def __init__(self, groupID, users = None):
@@ -204,15 +213,11 @@ class User:
         self.username = None
         self.userEntry = None
         return "Successfully Logged out!"
-
-
-u = User()
-
-try:
-    u.login("Amaya", "password")
-except Exception as e:
-    print(e)
-
-u.selectGroup(1)
-
-print(u.groups["1"].messages)
+    
+    def formatMessage(self, message):
+        return {"author": pj.getUsernameByID(message.author), "message": message.message}
+    def getMessages(self):
+        messages = []
+        for m in self.groups[str(self.cur_gid)].messages:
+            messages.append(self.formatMessage(m))
+        return messages
