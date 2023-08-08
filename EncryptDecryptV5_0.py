@@ -97,9 +97,9 @@ class EncryptDecrypt():
         choices = self.seed_2[:]
         random.shuffle(choices)
         for i in range(len(msg)):
-            char1 = random.choice(choices)
-            char2 = random.choice(choices)
-            msg[i] = chr(int(msg[i]) - int(ord(char1)) - int(ord(char2)))
+            char1 = ord(random.choice(choices))
+            char2 = ord(random.choice(choices))
+            msg[i] = chr(int(msg[i]) - int(char1) - int(char2))
         return "".join(msg)
 
 def numbers_encrypt(msg, seed = [0,1,2,3,4,5,6,7,8,9]):
@@ -114,12 +114,12 @@ def numbers_encrypt(msg, seed = [0,1,2,3,4,5,6,7,8,9]):
     scramble_array = seed[:]
     msg = list(msg)
     new_msg = []
-    for char in list("".join(msg)):
+    for c in list("".join(msg)):
         scramble_array.append(scramble_array.pop(0))
         try:
-            new_msg.append(str(scramble_array.index(int(char))))
+            new_msg.append(str(scramble_array.index(int(c))))
         except:
-            print(char)
+            print(c)
             raise
 
     return new_msg
@@ -134,12 +134,12 @@ def numbers_decrypt(msg:list, seed = [0,1,2,3,4,5,6,7,8,9]):
     """
     scramble_array = seed[:]
     new_msg = []
-    for char in msg:
+    for c in msg:
         scramble_array = scramble_array[-1:] + scramble_array[:-1]
-        if char.isdigit():
-            new_msg.append(str(scramble_array.index(int(char))))
+        if c.isdigit():
+            new_msg.append(str(scramble_array.index(int(c))))
         else:
-            new_msg.append(char)
+            new_msg.append(c)
     return new_msg
 
 def to_number(msg):
@@ -147,8 +147,8 @@ def to_number(msg):
     Converts a long message into a list of ascii ints
     """
     nums = []
-    for char in msg:
-        nums.append(str(ord(char)).zfill(3))
+    for c in msg:
+        nums.append(str(ord(c)).zfill(3))
     return nums
 
 def from_number(msg):

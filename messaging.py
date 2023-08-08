@@ -15,12 +15,28 @@ def gen_user_seeds(username:str, uid:int):
     return [seed_gen_pub(es_uid), seed_gen_priv(str(es_uid) + username), es_uid]
 
 class Message:
-    def __init__(self, raw:dict):
+    def __init__(self, raw:dict, m_id:int, a_id:int, g_id:int, encrypted:bool = False):
         """Message class is a destructed version of the raw message dictionary from the db
-        
+        EX: {"author": "2", "message": "hello"}
         """
         self.author = raw["author"]
         self.message = raw["message"]
+        self.ed_key = ev(m_id + a_id + g_id)
+        self.M_ED = EncryptDecrypt(seed_gen_pub(self.ed_key), seed_gen_priv(self.ed_key))
+        self.__is_encrypted__ = encrypted
+
+    def encryptMessage(self):
+        if not self.__is_encrypted__:
+            self.message = self.M_ED.encrypt_seeded(self.message)
+            self.__is_encrypted__ = True
+        return
+    
+    def decryptMessage(self):
+        if self.__is_encrypted__:
+            self.message = self.M_ED.decrypt_seeded(self.message)
+            self.__is_encrypted__ = False
+        return
+
 
 class py_json:
     def __init__(self, location):
@@ -44,16 +60,19 @@ class py_json:
         """Get newest group ID"""
         return self.groups["data"]["t_groups"]
 
-    def getMessages(self, ids):
+    def getMessages(self, ids, groupID):
         """Get messages by ID
         Args: ids -> list | list of message IDS
         """
         messages = []
         for x in range(len(ids)):
-            messages.insert(0,Message(self.messages[str(ids[x])]))
+            messageRaw = self.messages[str(ids[x])]
+            messageClass = Message(messageRaw, int(ids[x]), int(messageRaw["author"]), int(groupID), True)
+            messageClass.decryptMessage()
+            messages.insert(0, messageClass)
         return messages
     
-    def addMessage(self,uid, m):
+    def addMessage(self,m):
         """Add a message to the DB
         
         Args: m -> String | Message content
@@ -61,8 +80,8 @@ class py_json:
         Returns message ID
         """
         self.messages[self.messages["data"]["t_messages"]] = {
-            "author" : uid,
-            "message" : m
+            "author" : m.author,
+            "message" : m.message
         }
         self.db["messages"]["data"]["t_messages"] = self.db["messages"]["data"]["t_messages"] + 1
         newData = json.dumps(self.db, indent=4)
@@ -129,7 +148,7 @@ class Group:
         if str(groupID) in pj.groups:
             self.groupID = groupID 
             self.message_ids = pj.groups[str(self.groupID)]["message_ids"]
-            self.messages = pj.getMessages(self.message_ids)
+            self.messages = pj.getMessages(self.message_ids, groupID)
             self.users = pj.groups[str(self.groupID)]["users"]
         else:
             self.groupID = pj.newGroup
@@ -138,9 +157,14 @@ class Group:
             self.users = [users]
 
     def sendMessage(self, author, m):
-        self.message_ids.append(pj.addMessage(author, m))
+        m_id = pj.messages["data"]["t_messages"]
+        newMessage = Message({"author" : author, "message" : m}, int(m_id), int(author) ,int(self.groupID))
+        self.messages.insert(0, newMessage)
+        newMessage.encryptMessage()
+        pj.addMessage(newMessage)
+        self.message_ids.append(m_id)
         pj.updateGroup(self)
-        self.messages.insert(0,{"author" : author, "message" : m})
+        
         return
     def returnMessages(self):
         raw_messages = []
@@ -194,7 +218,7 @@ class User:
         """
         if self.loggedIn:
             cur_gid = pj.updateUserGroups(pj.createGroup([str(self.uid), str(user_ids)]))
-            self.groups[cur_gid] = Group(cur_gid)
+            self.groups[str(cur_gid)] = Group(cur_gid)
             self.cur_gid = cur_gid
         
     def sendMessage(self, message):
@@ -215,6 +239,7 @@ class User:
         return "Successfully Logged out!"
     
     def formatMessage(self, message):
+        message.decryptMessage()
         return {"author": pj.getUsernameByID(message.author), "message": message.message}
     def getMessages(self):
         messages = []

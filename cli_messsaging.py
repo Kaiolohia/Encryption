@@ -1,15 +1,28 @@
 import messaging
 import time
+from os import system
 
 running = True
 u = messaging.User()
+
+def clear():
+    if name == 'nt':
+        _ = system('cls')
+    else:
+        _ = system('clear')
+
+def formatMessages(m:list):
+    for i in reversed(m):
+        print(f"{i['author']}: {i['message']}")
+    print("\n\n")
 
 #Group loop
 def inGroup():
     inGroup = True
     while inGroup:
-        print(u.getMessages())
-        message = input("Type your messsage here\nType --back to exit group")
+        clear()
+        formatMessages(u.getMessages())
+        message = input("Type your messsage here\nType --back to exit group\n-> ")
         if "--back" in message:
             inGroup = False
             return
